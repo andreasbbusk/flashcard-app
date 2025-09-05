@@ -4,9 +4,16 @@ import axios from "axios";
 const getBaseURL = () => {
   // If we're on the server side, use the full URL
   if (typeof window === 'undefined') {
-    return process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}/api`
-      : 'http://localhost:3000/api';
+    // In production (Vercel), use the deployment URL
+    if (process.env.VERCEL_URL) {
+      return `https://${process.env.VERCEL_URL}/api`;
+    }
+    // In development or if VERCEL_URL is not set, construct from known host
+    if (process.env.NODE_ENV === 'production') {
+      return 'https://flashcard-app-lilac-zeta.vercel.app/api';
+    }
+    // Local development
+    return 'http://localhost:3001/api';
   }
   // On the client side, use relative URL
   return '/api';
