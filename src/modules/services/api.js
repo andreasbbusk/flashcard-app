@@ -1,7 +1,19 @@
 import axios from "axios";
 
+// Determine base URL based on environment
+const getBaseURL = () => {
+  // If we're on the server side, use the full URL
+  if (typeof window === 'undefined') {
+    return process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}/api`
+      : 'http://localhost:3000/api';
+  }
+  // On the client side, use relative URL
+  return '/api';
+};
+
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: getBaseURL(),
 });
 
 export const getFlashcards = async () => {
