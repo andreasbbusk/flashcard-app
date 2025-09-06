@@ -4,24 +4,14 @@ const FLASHCARDS_KEY = 'flashcards';
 const SETS_KEY = 'sets';
 const COUNTERS_KEY = 'counters';
 
-// Redis client singleton
-let redisClient = null;
+// Initialize Redis client following Vercel guidelines
+let redis = null;
 
-// Initialize Redis client
-const getRedisClient = async () => {
-  if (!redisClient) {
-    redisClient = createClient({
-      url: process.env.REDIS_URL,
-    });
-
-    redisClient.on('error', (err) => {
-      console.error('Redis Client Error:', err);
-    });
-
-    await redisClient.connect();
-    console.log('Connected to Redis');
+const getRedisConnection = async () => {
+  if (!redis && process.env.REDIS_URL) {
+    redis = await createClient({ url: process.env.REDIS_URL }).connect();
   }
-  return redisClient;
+  return redis;
 };
 
 // In-memory storage for fallback
@@ -36,10 +26,12 @@ const storage = {
   async get(key) {
     try {
       if (process.env.REDIS_URL) {
-        const client = await getRedisClient();
-        const data = await client.get(key);
-        if (data) {
-          return JSON.parse(data);
+        const redisClient = await getRedisConnection();
+        if (redisClient) {
+          const data = await redisClient.get(key);
+          if (data) {
+            return JSON.parse(data);
+          }
         }
         // Return default values for each key type
         if (key === COUNTERS_KEY) {
@@ -59,9 +51,11 @@ const storage = {
   async set(key, value) {
     try {
       if (process.env.REDIS_URL) {
-        const client = await getRedisClient();
-        await client.set(key, JSON.stringify(value));
-        return;
+        const redisClient = await getRedisConnection();
+        if (redisClient) {
+          await redisClient.set(key, JSON.stringify(value));
+          return;
+        }
       }
     } catch (error) {
       console.warn('Redis set failed, falling back to memory:', error);
@@ -251,11 +245,3 @@ export const initializeData = async () => {
   }
 };
 
-// Graceful shutdown
-export const closeRedisConnection = async () => {
-  if (redisClient) {
-    await redisClient.quit();
-    redisClient = null;
-    console.log('Redis connection closed');
-  }
-};
