@@ -8,12 +8,12 @@ const getBaseURL = () => {
     if (process.env.VERCEL_URL) {
       return `https://${process.env.VERCEL_URL}/api`;
     }
-    // In development or if VERCEL_URL is not set, construct from known host
-    if (process.env.NODE_ENV === 'production') {
+    // In production, use the known production URL
+    if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
       return 'https://flashcard-app-lilac-zeta.vercel.app/api';
     }
     // Local development
-    return 'http://localhost:3001/api';
+    return 'http://localhost:3000/api';
   }
   // On the client side, use relative URL
   return '/api';
