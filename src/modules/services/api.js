@@ -25,13 +25,32 @@ export const getFlashcards = async () => {
 };
 
 export const getSets = async () => {
-  const response = await api.get("/sets");
-  return response.data.data;
+  console.log('getSets called with baseURL:', api.defaults.baseURL);
+  try {
+    const response = await api.get("/sets");
+    console.log('getSets response:', response);
+    console.log('getSets response.data:', response.data);
+    console.log('getSets response.data.data:', response.data.data);
+    return response.data.data;
+  } catch (error) {
+    console.error('getSets error:', error);
+    throw error;
+  }
 };
 
 export const getFlashcardsBySet = async (setName) => {
-  const response = await api.get(`/sets/${encodeURIComponent(setName)}/flashcards`);
-  return response.data.data;
+  console.log('getFlashcardsBySet called with setName:', setName);
+  console.log('getFlashcardsBySet baseURL:', api.defaults.baseURL);
+  try {
+    const response = await api.get(`/sets/${encodeURIComponent(setName)}/flashcards`);
+    console.log('getFlashcardsBySet response:', response);
+    console.log('getFlashcardsBySet response.data:', response.data);
+    console.log('getFlashcardsBySet response.data.data:', response.data.data);
+    return response.data.data;
+  } catch (error) {
+    console.error('getFlashcardsBySet error:', error);
+    throw error;
+  }
 };
 
 export const createFlashcard = async (flashcard) => {
