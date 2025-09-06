@@ -2,23 +2,16 @@ import Link from 'next/link';
 import { getSets as getSetsFromDataLayer, initializeData } from '@/lib/dataLayer';
 
 export default async function Dashboard() {
-  console.log('Dashboard component rendering - server side');
   let sets = [];
   let error = null;
 
   try {
-    console.log('About to initialize data and get sets from data layer');
     await initializeData();
     sets = await getSetsFromDataLayer();
-    console.log('getSetsFromDataLayer returned:', sets);
-    console.log('Sets length:', sets?.length);
   } catch (err) {
     error = 'Kunne ikke hente sets';
     console.error('Error fetching sets:', err);
-    console.error('Error details:', err.message, err.stack);
   }
-
-  console.log('Final state - sets:', sets, 'error:', error);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
