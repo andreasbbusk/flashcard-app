@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getSets } from '@/modules/services/api';
+import { getSets as getSetsFromDataLayer, initializeData } from '@/lib/dataLayer';
 
 export default async function Dashboard() {
   console.log('Dashboard component rendering - server side');
@@ -7,9 +7,10 @@ export default async function Dashboard() {
   let error = null;
 
   try {
-    console.log('About to call getSets()');
-    sets = await getSets();
-    console.log('getSets returned:', sets);
+    console.log('About to initialize data and get sets from data layer');
+    await initializeData();
+    sets = await getSetsFromDataLayer();
+    console.log('getSetsFromDataLayer returned:', sets);
     console.log('Sets length:', sets?.length);
   } catch (err) {
     error = 'Kunne ikke hente sets';
