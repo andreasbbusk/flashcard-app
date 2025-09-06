@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Flashcard from '@/modules/components/flashcard';
-import { getFlashcardsBySet } from '@/modules/services/api';
+import Flashcard from '@/components/flashcard';
+import { getFlashcardsBySet } from '@/lib/api';
 
 export default function StudyPage() {
   const params = useParams();
@@ -87,7 +87,7 @@ export default function StudyPage() {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
             <Link 
-              href="/dashboard"
+              href="/"
               className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">

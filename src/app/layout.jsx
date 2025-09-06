@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,17 +13,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Flashcard app",
-  description: "Flashcard app",
+  title: "Flashcards App - Lær med flashcards",
+  description: "En moderne flashcard applikation til effektiv læring og hukommelse",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="da">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );
