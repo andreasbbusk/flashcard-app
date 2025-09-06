@@ -2,15 +2,22 @@ import Link from 'next/link';
 import { getSets } from '@/modules/services/api';
 
 export default async function Dashboard() {
+  console.log('Dashboard component rendering - server side');
   let sets = [];
   let error = null;
 
   try {
+    console.log('About to call getSets()');
     sets = await getSets();
+    console.log('getSets returned:', sets);
+    console.log('Sets length:', sets?.length);
   } catch (err) {
     error = 'Kunne ikke hente sets';
     console.error('Error fetching sets:', err);
+    console.error('Error details:', err.message, err.stack);
   }
+
+  console.log('Final state - sets:', sets, 'error:', error);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">

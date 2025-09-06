@@ -33,21 +33,30 @@ export default function StudyPage() {
 
   useEffect(() => {
     const fetchFlashcards = async () => {
+      console.log('fetchFlashcards called - client side');
+      console.log('setName:', setName);
       try {
         setLoading(true);
+        console.log('About to call getFlashcardsBySet');
         const cards = await getFlashcardsBySet(setName);
+        console.log('getFlashcardsBySet returned:', cards);
+        console.log('Cards length:', cards?.length);
         setFlashcards(cards);
         setError(null);
       } catch (err) {
         setError('Kunne ikke hente flashcards for dette set');
         console.error('Error fetching flashcards:', err);
+        console.error('Error details:', err.message, err.stack);
       } finally {
         setLoading(false);
       }
     };
 
     if (setName) {
+      console.log('setName exists, calling fetchFlashcards');
       fetchFlashcards();
+    } else {
+      console.log('No setName provided');
     }
   }, [setName]);
 
